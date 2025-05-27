@@ -1,0 +1,60 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      TZ: ${TZ}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql:/docker-entrypoint-initdb.d
+    networks:
+      - networkcasopractico
+
+  sqlserver:
+      image: mcr.microsoft.com/mssql/server:2022-latest
+      container_name: sqlserver-db
+      restart: always
+      environment:
+        ACCEPT_EULA: "Y"
+        SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+        MSSQL_PID: "Express"
+        TZ: ${TZ}
+      ports:
+        - "1433:1433"
+      volumes:
+        - sqlserver_data:/var/opt/mssql
+      networks:
+      - networkcasopractico
+
+  client-service:
+    build:
+      context: .
+      dockerfile: client-service/Dockerfile
+    container_name: client-service
+    restart: always
+    ports:
+      - "5000:8080"  # Puerto externo:interno (ajustable)
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      TZ: ${TZ}
+      LOG_DIR: /app/logs  
+      ConnectionStrings__MysqlConnection: "Server=mysql-db;Port=3306;Database=${MYSQL_DATABASE};Uid=root;Pwd=${MYSQL_ROOT_PASSWORD};"
+    depends_on:
+      - mysql
+    volumes:
+      - client_logs:/app/logs
+    networks:
+      - networkcasopractico
+
+volumes:
+  mysql_data:
+  sqlserver_data:
+  client_logs:
+
+networks:
+  networkcasopractico:
