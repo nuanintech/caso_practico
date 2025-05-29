@@ -1,5 +1,4 @@
 ﻿using client_service.Application.Commands;
-using client_service.Domain.ValueObjects;
 using client_service.Shared.DTOs;
 using FluentValidation;
 using System.Text.RegularExpressions;
@@ -17,7 +16,6 @@ namespace client_service.Shared.Validator {
             RuleFor(x => x.Email).NotEmpty().WithMessage(MessageValidator.CampoRequeridoMensaje).Must(email => EmailRegex.IsMatch(email)).WithMessage("El email no tiene un formato válido.");
             RuleFor(x => x.Edad).InclusiveBetween(15, 70).WithMessage(MessageValidator.AnioCampoEntreMensaje).When(x => x.Edad.HasValue);
         }
-        
         #endregion
     }
 }

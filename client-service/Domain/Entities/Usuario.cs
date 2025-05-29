@@ -8,6 +8,8 @@
         public int? Edad { get; set; }
         public required string Email { get; set; }
         public string? Cargo { get; set; }
+
+        // Estados válidos: Activo, Inactivo
         public required string Estado { get; set; }
     }
 }

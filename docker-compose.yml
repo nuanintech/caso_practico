@@ -16,19 +16,20 @@ services:
       - networkcasopractico
 
   sqlserver:
-      image: mcr.microsoft.com/mssql/server:2022-latest
-      container_name: sqlserver-db
-      restart: always
-      environment:
-        ACCEPT_EULA: "Y"
-        SA_PASSWORD: ${MSSQL_SA_PASSWORD}
-        MSSQL_PID: "Express"
-        TZ: ${TZ}
-      ports:
-        - "1433:1433"
-      volumes:
-        - sqlserver_data:/var/opt/mssql
-      networks:
+    build:
+      context: ./sqlserver
+      dockerfile: Dockerfile
+    container_name: sqlserver-db
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${MSSQL_SA_PASSWORD}
+      MSSQL_PID: "Express"
+      TZ: ${TZ}
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
       - networkcasopractico
 
   client-service:
@@ -51,10 +52,50 @@ services:
     networks:
       - networkcasopractico
 
+  task-service:
+    build:
+      context: .
+      dockerfile: task-service/Dockerfile
+    container_name: task-service
+    restart: always
+    ports:
+      - "5001:8080"  # Puerto externo:interno (ajustable)
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      TZ: ${TZ}
+      LOG_DIR: /app/logs  
+      ConnectionStrings__SqlServerConnection: "Server=sqlserver-db,1433;Database=${MSSQL_DB};User Id=sa;Password=${MSSQL_SA_PASSWORD};TrustServerCertificate=true;"
+    depends_on:
+      - sqlserver
+    volumes:
+      - task_logs:/app/logs
+    networks:
+      - networkcasopractico
+  
+  ftp-server:
+    image: fauria/vsftpd
+    container_name: ftp-server
+    restart: always
+    ports:
+      - "21:21"
+      - "21100-21110:21100-21110"  # Rango de puertos pasivos
+    environment:
+      FTP_USER: ${FTP_USER}
+      FTP_PASS: ${FTP_PASS}
+      PASV_MIN_PORT: 21100
+      PASV_MAX_PORT: 21110
+      PASV_ADDRESS: 127.0.0.1  # O tu IP si accedes desde fuera
+    volumes:
+      - ftp_data:/home/vsftpd
+    networks:
+      - networkcasopractico
+
 volumes:
   mysql_data:
   sqlserver_data:
   client_logs:
+  task_logs:
+  ftp_data:
 
 networks:
   networkcasopractico:

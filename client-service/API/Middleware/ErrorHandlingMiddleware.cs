@@ -24,25 +24,23 @@ namespace client_service.API.Middleware {
                 await next(context);
             }
             catch (ValidationException ex) {
-                logger.LogWarning(ex, "Error de validación en la solicitud.");
+                logger.LogWarning(ex, "more2286: Error de validación en la solicitud.");
 
                 // Si tu ValidationException tiene un diccionario de errores
                 var errores = ex.Errors?.SelectMany(e => e.Value).ToArray() ?? new[] { ex.Message };
 
                 await HandleExceptionAsync(context, HttpStatusCode.BadRequest, "Se encontraron errores de validación.",errores);
             }
+            catch (NotFoundException ex) {
+                logger.LogWarning($"more2286: Recurso no encontrado: {ex.Message} | Ruta: {context.Request.Path}");
+                await HandleExceptionAsync(context, HttpStatusCode.NotFound, "Recurso no encontrado", new[] { ex.Message });
+            }
             catch (ConflictException ex) {
-                logger.LogWarning(ex, "Valor fuera de rango");
+                logger.LogWarning(ex, "more2286: Conflicto");
                 await HandleExceptionAsync(context, HttpStatusCode.Conflict, "Dato inválido", new[] { ex.Message });
             }
-            catch (ArgumentOutOfRangeException ex)
-            {
-                logger.LogWarning(ex, "Valor fuera de rango");
-                await HandleExceptionAsync(context, HttpStatusCode.BadRequest, "Dato inválido", new[] { ex.Message });
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex, "Error inesperado");
+            catch (Exception ex) {
+                logger.LogError(ex, "more2286: Error inesperado");
                 await HandleExceptionAsync(context, HttpStatusCode.InternalServerError, "Error inesperado", new[] { "Ocurrió un error inesperado" });
             }
         }
@@ -52,9 +50,7 @@ namespace client_service.API.Middleware {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
-            var response = new
-            {
-                status = context.Response.StatusCode,
+            var response = new {
                 title,
                 errors
             };

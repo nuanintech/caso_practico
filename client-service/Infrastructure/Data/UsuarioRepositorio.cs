@@ -23,7 +23,7 @@ namespace client_service.Infrastructure.Data {
         }
         public async Task<Usuario?> GetByIdentificationAsync(string identificacion) {
             var sql = "Select * From usuarios where identificacion = @Identificacion";
-            return await dbConnection.QueryFirstOrDefaultAsync<Usuario?>(sql, new { Identificacion = identificacion });
+            return  await dbConnection.QueryFirstOrDefaultAsync<Usuario?>(sql, new { Identificacion = identificacion });
         }
         public async Task<Usuario?> GetByEmailAsync(string email) {
             var sql = "Select * From usuarios where email = @Email";
@@ -37,24 +37,15 @@ namespace client_service.Infrastructure.Data {
             var sql = @"Insert into usuarios (id, identificacion, nombres, apellidos, edad, cargo, email, estado) 
                         values (@Id, @Identificacion, @Nombres, @Apellidos, @Edad, @Cargo, @Email, @Estado)";
 
-            // Generar ID automáticamente
-            usuario.Id = Guid.NewGuid();
-
             if (dbConnection.State == ConnectionState.Closed)
                 dbConnection.Open();
 
             using var transaction = dbConnection.BeginTransaction();
             try {
-                var existing = await dbConnection.QueryFirstOrDefaultAsync<Usuario>("Select id From usuarios Where id = @Id", new { usuario.Id }, transaction);
-                if (existing != null) {
-                    transaction.Rollback();
-                    throw new RepositorioException($"Ya existe un usuario con el Id : {usuario.Id}.");
-                }
-
                 var affected = await dbConnection.ExecuteAsync(sql, usuario, transaction);
                 if (affected == 0) {
                     transaction.Rollback();
-                    throw new RepositorioException($"No se pudo insertar el usuario con el Id : {usuario.Id}");
+                    throw new Exception($"No se pudo insertar el usuario con el Id : {usuario.Id}");
                 }
 
                 transaction.Commit();
@@ -66,16 +57,11 @@ namespace client_service.Infrastructure.Data {
             }
         }
         public async Task UpdateAsync(Usuario usuario) {
+            if (dbConnection.State == ConnectionState.Closed)
+                dbConnection.Open(); 
+
             using var transaction = dbConnection.BeginTransaction();
             try {
-                // Verificar si el usuario existe antes de actualizar
-                var existing = await dbConnection.QueryFirstOrDefaultAsync<Usuario>("Select id From usuarios WHERE id = @Id", new { usuario.Id }, transaction);
-
-                if (existing == null) {
-                    transaction.Rollback();
-                    throw new Exception($"No se encontró el usuario con Id {usuario.Id}.");
-                }
-
                 var sql = @"Update usuarios Set 
                         identificacion = @Identificacion,
                         nombres = @Nombres,
@@ -94,35 +80,30 @@ namespace client_service.Infrastructure.Data {
 
                 transaction.Commit();
             }
-            catch {
+            catch (Exception ex) {
                 transaction.Rollback();
-                throw;
+                throw new Exception(ex.Message);
             }
         }
         public async Task DeleteAsync(Guid id) {
+            if (dbConnection.State == ConnectionState.Closed)
+                dbConnection.Open();
+
             using var transaction = dbConnection.BeginTransaction();
             try {
-                // Verificar si el usuario existe
-                var existing = await dbConnection.QueryFirstOrDefaultAsync<Usuario>("Select id From usuarios WHERE id = @Id", new { Id = id }, transaction);
-
-                if (existing == null) {
-                    transaction.Rollback();
-                    throw new Exception($"No se encontró el usuario con Id {id}.");
-                }
-
                 var sql = "Delete From usuarios Where id = @Id";
                 var affected = await dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
 
                 if (affected == 0) {
                     transaction.Rollback();
-                    throw new Exception($"No se pudo eliminar el usuario con Id {id}.");
+                    throw new Exception($"No se pudo eliminar el usuario con Id : {id}.");
                 }
 
                 transaction.Commit();
             }
-            catch {
+            catch (Exception ex) {
                 transaction.Rollback();
-                throw;
+                throw new Exception(ex.Message);
             }
         }
         #endregion

@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     identificacion VARCHAR(20) NOT NULL,
     nombres VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
-    edad INT NOT NULL,
+    edad INT,
     email VARCHAR(50) NOT NULL,
     cargo VARCHAR(50),
     estado VARCHAR(10) NOT NULL DEFAULT 'Activo',

@@ -2,8 +2,7 @@
 using MySql.Data.MySqlClient;
 using System.Data;
 
-namespace client_service.Infrastructure.Persistence
-{
+namespace client_service.Infrastructure.Persistence {
     public class DbConnectionMySql : IConnectionFactory {
         private readonly IConfiguration configuration;
 

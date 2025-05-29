@@ -1,9 +1,8 @@
 using client_service.API.Middleware;
-using client_service.Application.Behaviors;
-using client_service.Application.Validator;
 using client_service.Domain.Interfaces;
 using client_service.Infrastructure.Data;
 using client_service.Infrastructure.Persistence;
+using client_service.Shared.Validator;
 using client_service.Shared.Validator.FilterValidator;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -48,18 +47,18 @@ builder.Host.UseSerilog();
 // Cambia la línea problemática para evitar el uso de la propiedad inexistente "SuppressModelStateInvalidFilter".
 // En su lugar, utiliza un filtro global para deshabilitar la validación automática del estado del modelo.
 
-builder.Services.AddControllers(options =>
-{
-    options.Filters.Add(typeof(ModelStateValidationFilter)); // Add the filter globally
-}).ConfigureApiBehaviorOptions(options =>
-{
-    options.SuppressModelStateInvalidFilter = true; // Disable automatic model validation
+builder.Services.AddControllers(options => {
+    options.Filters.Add(typeof(ModelStateValidationFilter)); 
+}).ConfigureApiBehaviorOptions(options => {
+    options.SuppressModelStateInvalidFilter = true; // Deshabilitación de la validación automática del estado del modelo
 });
 // Registro del filtro personalizado
 builder.Services.AddScoped<ModelStateValidationFilter>();
-// FluentValidation
-builder.Services.AddValidatorsFromAssemblyContaining<CreateUsuarioCommandValidator>();
+
+// Obtiene todos los validadores de DTOs y se basa en la convención de nombres para registrarlos automáticamente
+builder.Services.AddValidatorsFromAssembly(typeof(CreateUsuarioDTOValidator).Assembly);
 builder.Services.AddFluentValidationAutoValidation();
+
 // Agregamos los servicios de Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {

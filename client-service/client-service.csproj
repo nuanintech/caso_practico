@@ -27,8 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Application\Queries\" />
-    <Folder Include="Infrastructure\Services\" />
+    <Folder Include="Domain\ValueObjects\" />
     <Folder Include="Logs\" />
     <Folder Include="Test\" />
   </ItemGroup>

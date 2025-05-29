@@ -11,5 +11,8 @@
         public static string CampoMayorIgualQue = "El campo {PropertyName} debe ser mayor o igual a cero";
         public static string FechaMayorIgualActual = "El campo {PropertyName} debe ser mayor a igual a la fecha actual";
         public static string FechaMayorIgualOtraFecha = "El campo {PropertyName} debe ser mayor a igual al campo {ComparisonValue}";
+        public static string ValorEnumInvalido = "El valor proporcionado al campo {PropertyName} no es válido";
+        public const string FechaInvalida = "El campo {PropertyName} debe ser una fecha válida.";
+        public const string GUIDProporcionadoInvalido = "El campo {PropertyName} tiene un GUID inválido.";
     }
 }
