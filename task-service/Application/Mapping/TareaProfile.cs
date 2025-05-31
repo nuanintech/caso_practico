@@ -8,8 +8,7 @@ namespace task_service.Application.Mapping {
     public class TareaProfile : Profile {
         public TareaProfile() {
             // DTO (tarea) → Command (CQRS)
-            CreateMap<CreateTareaDTO, CreateTareaCommand>()
-                .ForMember(dest => dest.EstadoTarea, opt => opt.MapFrom(src => Enum.Parse<StateTask>(src.EstadoTarea, true)));
+            CreateMap<CreateTareaDTO, CreateTareaCommand>();
             //CreateMap<UpdateTareaDTO, UpdateUsuarioCommand>();
 
             // Task Entity → DTO de respuesta

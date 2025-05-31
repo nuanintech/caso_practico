@@ -1,0 +1,12 @@
+[
+  {
+    "CodigoTarea": "T10-004",
+    "Titulo": "Prueba de ftp 4",
+    "Descripcion": "Prueba de ftp 4",
+    "CriteriosAceptacion": null,
+    "FechaInicio": "2025-05-30T00:00:00",
+    "FechaFin": "2025-06-02T00:00:00",
+    "EstadoTarea": "Backlog",
+    "UsuarioId": null
+  }
+]

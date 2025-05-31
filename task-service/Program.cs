@@ -1,27 +1,32 @@
-using FluentValidation;
+ï»¿using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using System.Data;
 using System.Reflection;
 using task_service.API.Middleware;
+using task_service.Application.Behaviors;
+using task_service.Application.Validation;
 using task_service.Domain.Interfaces;
+using task_service.Infrastructure.Configuration;
 using task_service.Infrastructure.Data;
+using task_service.Infrastructure.Ftp;
 using task_service.Infrastructure.Persistence;
-using task_service.Shared.Validator;
-using task_service.Shared.Validator.FilterValidator;
+using task_service.Infrastructure.Services;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Cambia la ruta del archivo de logs a un directorio accesible y persistente dentro del contenedor Docker.
-// Por convención, usa "/app/Logs" o una ruta configurable por variable de entorno.
+// Por convenciÃ³n, usa "/app/Logs" o una ruta configurable por variable de entorno.
 var logDirectory = Environment.GetEnvironmentVariable("LOG_DIR")
                    ?? Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "logs");
 
-// Asegúrate de que el directorio exista antes de inicializar el logger.
+// AsegÃºrate de que el directorio exista antes de inicializar el logger.
 Directory.CreateDirectory(logDirectory);
 var logFilePath = Path.Combine(logDirectory, "log-.txt");
 
@@ -30,12 +35,12 @@ Log.Logger = new LoggerConfiguration()
     .WriteTo.File(
        logFilePath, // Ruta absoluta
         rollingInterval: RollingInterval.Day,
-        restrictedToMinimumLevel: LogEventLevel.Information, // Nivel mínimo de logs
+        restrictedToMinimumLevel: LogEventLevel.Information, // Nivel mÃ­nimo de logs
         outputTemplate: "[{Timcaestamp:dd-MM-yyyy HH:mm:ss}] [{Level:u3}] {Message:lj}{NewLine}{Exception}")
-    .Filter.ByIncludingOnly(logEvent => ShouldLog(logEvent)) // Filtrar los eventos específicos
+    .Filter.ByIncludingOnly(logEvent => ShouldLog(logEvent)) // Filtrar los eventos especÃ­ficos
     .CreateLogger();
 
-// Función para determinar qué eventos deben ser registrados
+// FunciÃ³n para determinar quÃ© eventos deben ser registrados
 static bool ShouldLog(LogEvent logEvent)
 {
     // Registrar solo logs que contengan la palabra clave "definido por el usuario"
@@ -45,20 +50,16 @@ static bool ShouldLog(LogEvent logEvent)
 // Reemplazar el logger predeterminado por Serilog
 builder.Host.UseSerilog();
 
-// Cambia la línea problemática para evitar el uso de la propiedad inexistente "SuppressModelStateInvalidFilter".
-// En su lugar, utiliza un filtro global para deshabilitar la validación automática del estado del modelo.
+// ConfiguraciÃ³n FtpSettings desde appsettings.json o docker-compose
+builder.Services.Configure<FtpSettings>(builder.Configuration.GetSection("FtpSettings"));
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<FtpSettings>>().Value);
 
-builder.Services.AddControllers(options => {
-    options.Filters.Add(typeof(ModelStateValidationFilter));
-}).ConfigureApiBehaviorOptions(options => {
-    options.SuppressModelStateInvalidFilter = true; // Deshabilitación de la validación automática del estado del modelo
-});
-// Registro del filtro personalizado
-builder.Services.AddScoped<ModelStateValidationFilter>();
+// InyecciÃ³n de dependencias
+builder.Services.AddSingleton<FtpHelper>();
+builder.Services.AddHostedService<FtpTareaProcesarServicio>();
 
-// Obtiene todos los validadores de DTOs y se basa en la convención de nombres para registrarlos automáticamente
-builder.Services.AddValidatorsFromAssembly(typeof(CreateTareaDTOValidator).Assembly);
-builder.Services.AddFluentValidationAutoValidation();
+
+builder.Services.AddControllers();
 
 // Agregamos los servicios de Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -67,6 +68,13 @@ builder.Services.AddSwaggerGen(c => {
 });
 // Configuracion para AutoMapper
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+// âœ… Registrar FluentValidation (busca validadores en todo el ensamblado)
+builder.Services.AddValidatorsFromAssembly(typeof(CreateTareaCommandValidator).Assembly);
+
+// âœ… Registrar el pipeline de validaciÃ³n para todos los Commands
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
 // Configuracion para MediatR
 builder.Services.AddMediatR(cfg => {
     cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
@@ -91,7 +99,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//  Middleware de manejo de errores (debe ir antes de cualquier lógica de autorización o endpoint)
+//  Middleware de manejo de errores (debe ir antes de cualquier lÃ³gica de autorizaciÃ³n o endpoint)
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseHttpsRedirection();

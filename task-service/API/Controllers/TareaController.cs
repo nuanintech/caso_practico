@@ -21,7 +21,7 @@ namespace task_service.API.Controllers {
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTareaDTO createTareaDTO) {
             // 1. Mapeamos el DTO al Command
-            var command = mapper.Map<CreateTareaCommand>(createTareaDTO);
+            var command = new CreateTareaCommand(createTareaDTO);
 
             // 2. Ejecutamos el flujo con MediatR (con validación automática)
             Tarea tarea = await mediator.Send(command);

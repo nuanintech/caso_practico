@@ -14,27 +14,29 @@ namespace task_service.Application.Handlers
         }
 
         public async Task<Tarea> Handle(CreateTareaCommand request, CancellationToken cancellationToken) {
-            var existente = await tareaRepositorio.GetByCodigoAsync(request.CodigoTarea);
+            var createTareaDTO = request.createTareaDTO;
+
+            var existente = await tareaRepositorio.GetByCodigoAsync(createTareaDTO.CodigoTarea);
             if (existente is not null)
-                throw new ConflictException($"Ya existe una tarea con el código: {request.CodigoTarea}");
+                throw new ConflictException($"Ya existe una tarea con el código: {createTareaDTO.CodigoTarea}");
 
             int? tiempoDias = null;
-            if (request.FechaInicio.HasValue && request.FechaFin.HasValue) {
-                tiempoDias = (request.FechaFin.Value - request.FechaInicio.Value).Days;
+            if (createTareaDTO.FechaInicio.HasValue && createTareaDTO.FechaFin.HasValue) {
+                tiempoDias = (createTareaDTO.FechaFin.Value - createTareaDTO.FechaInicio.Value).Days;
             }
 
             var tarea = new Tarea {
                 Id = Guid.NewGuid(),
-                CodigoTarea = request.CodigoTarea,
-                Titulo = request.Titulo,
-                Descripcion = request.Descripcion,
-                CriteriosAceptacion = request.CriteriosAceptacion,
-                FechaInicio = request.FechaInicio,
-                FechaFin = request.FechaFin,
+                CodigoTarea = createTareaDTO.CodigoTarea,
+                Titulo = createTareaDTO.Titulo,
+                Descripcion = createTareaDTO.Descripcion,
+                CriteriosAceptacion = createTareaDTO.CriteriosAceptacion,
+                FechaInicio = createTareaDTO.FechaInicio,
+                FechaFin = createTareaDTO.FechaFin,
                 TiempoDias = tiempoDias,
-                EstadoTarea = request.EstadoTarea.ToString(),  // Enum EstadoTarea
-                Estado = request.Estado.ToString(),            // Enum Estado
-                UsuarioId = request.UsuarioId
+                EstadoTarea = createTareaDTO.EstadoTarea.ToString(),  // Enum EstadoTarea
+                Estado = "Activo",            // Enum Estado
+                UsuarioId = createTareaDTO.UsuarioId
             };
 
             return await tareaRepositorio.CreateAsync(tarea);

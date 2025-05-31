@@ -1,0 +1,22 @@
+[
+  {
+    "CodigoTarea": "T10-001",
+    "Titulo": "Prueba de ftp 1",
+    "Descripcion": "Prueba de ftp 1",
+    "CriteriosAceptacion": null,
+    "FechaInicio": null,
+    "FechaFin": null,
+    "EstadoTarea": "Backlog",
+    "UsuarioId": null
+  },
+  {
+    "CodigoTarea": "T10-0012",
+    "Titulo": "Prueba de ftp 2",
+    "Descripcion": "Prueba de ftp 2",
+    "CriteriosAceptacion": null,
+    "FechaInicio": null,
+    "FechaFin": null,
+    "EstadoTarea": "Backlog",
+    "UsuarioId": null
+  }
+]

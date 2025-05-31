@@ -1,0 +1,16 @@
+[
+    {
+        "CodigoTarea": "T10-001",
+        "Titulo": "Prueba de ftp 1",
+        "Descripcion": "Prueba de ftp 1",
+        "EstadoTarea": "Backlog"
+    },
+    {
+        "CodigoTarea": "T10-004",
+        "Titulo": "Prueba de ftp 4",
+        "Descripcion": "Prueba de ftp 4",
+        "EstadoTarea": "Backlog",
+		"FechaInicio": "2025-05-30",
+		"FechaFin": "2025-06-02",
+    }
+]
