@@ -45,8 +45,19 @@ services:
       TZ: ${TZ}
       LOG_DIR: /app/logs  
       ConnectionStrings__MysqlConnection: "Server=mysql-db;Port=3306;Database=${MYSQL_DATABASE};Uid=root;Pwd=${MYSQL_ROOT_PASSWORD};"
+      RabbitMQSettings__Host: ${RABBITMQ_HOST}
+      RabbitMQSettings__Puerto: ${RABBITMQ_PORT}
+      RabbitMQSettings__Usuario: ${RABBITMQ_DEFAULT_USER}
+      RabbitMQSettings__Contrasena: ${RABBITMQ_DEFAULT_PASS}
+      RabbitMQSettings__TareaAsignadaQueue: ${RABBITMQ_TASK_QUEUE}
+      EmailSettings__Host: ${EMAIL_HOST}
+      EmailSettings__Puerto: ${EMAIL_PORT}
+      EmailSettings__Usuario: ${EMAIL_USER}
+      EmailSettings__Contrasena: ${EMAIL_PASS}
+      EmailSettings__Emisor: ${EMAIL_USER}
     depends_on:
       - mysql
+      - rabbitmq
     volumes:
       - client_logs:/app/logs
     networks:
@@ -72,8 +83,16 @@ services:
       FtpSettings__RutaProcesados: ${FTP_FOLDER_PROCESSED}
       FtpSettings__RutaErrores: ${FTP_FOLDER_ERROR}
       FtpSettings__IntervaloMinutos: ${FTP_INTERVAL_MINUTE}
+      RabbitMQSettings__Host: ${RABBITMQ_HOST}
+      RabbitMQSettings__Puerto: ${RABBITMQ_PORT}
+      RabbitMQSettings__Usuario: ${RABBITMQ_DEFAULT_USER}
+      RabbitMQSettings__Contrasena: ${RABBITMQ_DEFAULT_PASS}
+      RabbitMQSettings__TareaAsignadaQueue: ${RABBITMQ_TASK_QUEUE}
+      ClientSettings__ClientByIdUrl: ${CLIENT_SERVICE_BY_ID_URL}
     depends_on:
       - sqlserver
+      - rabbitmq
+      - ftp-server
     volumes:
       - task_logs:/app/logs
     networks:

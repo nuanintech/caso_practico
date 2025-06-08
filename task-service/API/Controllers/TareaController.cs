@@ -30,6 +30,16 @@ namespace task_service.API.Controllers {
             var response = mapper.Map<ResponseTareaDTO>(tarea);
             return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
         }
+        [HttpPatch("assignclient")]
+        public async Task<IActionResult> Assign([FromBody] AssignTareaDTO assignTareaDTO) {
+            // 1. Mapeamos el DTO al Command
+            var command = new AssignTareaCommand(assignTareaDTO);
+
+            // 2. Ejecutamos el flujo con MediatR (con validación automática)
+            await mediator.Send(command);
+
+            return NoContent();
+        }
         [HttpGet]
         public async Task<IActionResult> GetAll() {
             // 1. Ejecutamos el flujo con MediatR (con validación automática)

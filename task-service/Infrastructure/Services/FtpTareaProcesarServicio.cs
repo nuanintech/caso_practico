@@ -1,18 +1,12 @@
-﻿using AutoMapper;
-using FluentFTP;
+﻿using FluentFTP;
 using MediatR;
 using Microsoft.Extensions.Options;
-using System.ComponentModel.DataAnnotations;
-using System.Net;
 using System.Text.Json;
 using task_service.Application.Commands;
-using task_service.Domain.Entities;
 using task_service.Domain.Exceptions;
 using task_service.Infrastructure.Configuration;
 using task_service.Infrastructure.Ftp;
 using task_service.Shared.DTOs;
-using task_service.Shared.Validator;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace task_service.Infrastructure.Services {
     public class FtpTareaProcesarServicio : BackgroundService{

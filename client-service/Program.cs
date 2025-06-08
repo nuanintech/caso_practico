@@ -1,13 +1,16 @@
 using client_service.API.Middleware;
 using client_service.Domain.Interfaces;
+using client_service.Infrastructure.Configuration;
 using client_service.Infrastructure.Data;
 using client_service.Infrastructure.Persistence;
+using client_service.Infrastructure.Services;
 using client_service.Shared.Validator;
 using client_service.Shared.Validator.FilterValidator;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
@@ -58,6 +61,17 @@ builder.Services.AddScoped<ModelStateValidationFilter>();
 // Obtiene todos los validadores de DTOs y se basa en la convención de nombres para registrarlos automáticamente
 builder.Services.AddValidatorsFromAssembly(typeof(CreateUsuarioDTOValidator).Assembly);
 builder.Services.AddFluentValidationAutoValidation();
+
+// Configuración RabbitMQ desde appsettings.json o docker-compose
+builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQSettings"));
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMQSettings>>().Value);
+
+// Configuración EmailSettings
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<EmailSettings>>().Value);
+builder.Services.AddTransient<IEmailService, EmailServicio>();
+
+builder.Services.AddHostedService<RabbitMQConsumerServicio>(); // Registro del consumidor de RabbitMQ
 
 // Agregamos los servicios de Swagger
 builder.Services.AddEndpointsApiExplorer();

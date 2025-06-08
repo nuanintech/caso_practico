@@ -7,6 +7,7 @@ namespace task_service.Domain.Interfaces {
         Task<Tarea?> GetByCodigoAsync(string codigo);
         Task<IEnumerable<Tarea>> GetAllAsync();
         Task<Tarea> CreateAsync(Tarea tarea);
+        Task UpdateClientAsync(Guid id, Guid usuarioId);
         //Task UpdateAsync(Tarea tarea);
         //Task UpdateStateAsync(Guid id, StateTask nuevoEstado);
         //Task DeleteAsync(Guid id);

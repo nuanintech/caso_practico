@@ -52,6 +52,26 @@ namespace task_service.Infrastructure.Data
                 throw new Exception(ex.Message);
             }
         }
+        public async Task UpdateClientAsync(Guid id, Guid usuarioId) {
+            var sql = "Update tareas set usuarioid = @UsuarioId where id = @Id";
+            
+            if (dbConnection.State == ConnectionState.Closed)
+                dbConnection.Open();
+
+            using var transaction = dbConnection.BeginTransaction();
+            try {
+                var affected = await dbConnection.ExecuteAsync(sql, new { UsuarioId = usuarioId, Id = id }, transaction);
+                if (affected == 0) {
+                    transaction.Rollback();
+                    throw new Exception($"No se pudo actualizar la tarea con el Id : {id}");
+                }
+                transaction.Commit();
+            }
+            catch (Exception ex) {
+                transaction.Rollback();
+                throw new Exception(ex.Message);
+            }
+        }
 
         #endregion
     }

@@ -54,10 +54,18 @@ builder.Host.UseSerilog();
 builder.Services.Configure<FtpSettings>(builder.Configuration.GetSection("FtpSettings"));
 builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<FtpSettings>>().Value);
 
+// Configuración RabbitMQ desde appsettings.json o docker-compose
+builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQSettings"));
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<RabbitMQSettings>>().Value);
+
+// Configuración ClientSettings desde appsettings.json o docker-compose
+builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings"));
+builder.Services.AddHttpClient<IUsuarioService, UsuarioServicio>();
+
 // Inyección de dependencias
 builder.Services.AddSingleton<FtpHelper>();
 builder.Services.AddHostedService<FtpTareaProcesarServicio>();
-
+builder.Services.AddSingleton<IRabbitMQPublisher, RabbitMQPublisherServicio>();
 
 builder.Services.AddControllers();
 

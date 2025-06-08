@@ -27,7 +27,7 @@ BEGIN
         tiempodias INT,
         estadotarea VARCHAR(20) NOT NULL,
         estado VARCHAR(10) DEFAULT 'Activo',
-        usuarioid CHAR(36) NULL,
+         usuarioid UNIQUEIDENTIFIER NULL,
         CONSTRAINT CK_EstadoTarea CHECK (estadotarea IN ('Backlog', 'Doing', 'InReview', 'Done')),
         CONSTRAINT CK_Estado CHECK (estado IN ('Activo', 'Inactivo'))
     );
