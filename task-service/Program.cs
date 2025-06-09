@@ -36,7 +36,7 @@ Log.Logger = new LoggerConfiguration()
        logFilePath, // Ruta absoluta
         rollingInterval: RollingInterval.Day,
         restrictedToMinimumLevel: LogEventLevel.Information, // Nivel mínimo de logs
-        outputTemplate: "[{Timcaestamp:dd-MM-yyyy HH:mm:ss}] [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+        outputTemplate: "[{Timestamp:dd-MM-yyyy HH:mm:ss}] [{Level:u3}] {Message:lj}{NewLine}{Exception}")
     .Filter.ByIncludingOnly(logEvent => ShouldLog(logEvent)) // Filtrar los eventos específicos
     .CreateLogger();
 

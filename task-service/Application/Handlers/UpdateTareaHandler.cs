@@ -33,7 +33,7 @@ namespace task_service.Application.Handlers
                 tiempoDias = (updateTareaDTO.FechaFin.Value - updateTareaDTO.FechaInicio.Value).Days;
             }
 
-            tarea.Id = Guid.NewGuid();
+            tarea.Id = request.Id;
             tarea.CodigoTarea = updateTareaDTO.CodigoTarea;
             tarea.Titulo = updateTareaDTO.Titulo;
             tarea.Descripcion = updateTareaDTO.Descripcion;
