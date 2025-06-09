@@ -25,6 +25,10 @@ namespace task_service.Infrastructure.Data
             var sql = "Select * From tareas where codigotarea = @Codigo";
             return await dbConnection.QueryFirstOrDefaultAsync<Tarea?>(sql, new { Codigo = codigo });
         }
+        public async Task<IEnumerable<Tarea>> GetByUsuarioIdAsync(Guid usuarioId) {
+            var sql = "Select * From tareas where usuarioid = @UsuarioId";
+            return await dbConnection.QueryAsync<Tarea>(sql, new { UsuarioId = usuarioId });
+        }
         public async Task<IEnumerable<Tarea>> GetAllAsync() {
             var sql = "Select * From tareas";
             return await dbConnection.QueryAsync<Tarea>(sql);
@@ -72,7 +76,68 @@ namespace task_service.Infrastructure.Data
                 throw new Exception(ex.Message);
             }
         }
-
+        public async Task UpdateAsync(Tarea tarea) {
+            var sql = @"Update tareas set codigotarea = @CodigoTarea, titulo = @Titulo, descripcion = @Descripcion, criteriosaceptacion = @CriteriosAceptacion, 
+                        fechainicio = @FechaInicio, fechafin = @FechaFin, tiempodias = @TiempoDias
+                        where id = @Id";
+            
+            if (dbConnection.State == ConnectionState.Closed)
+                dbConnection.Open();
+            
+            using var transaction = dbConnection.BeginTransaction();
+            try {
+                var affected = await dbConnection.ExecuteAsync(sql, tarea, transaction);
+                if (affected == 0) {
+                    transaction.Rollback();
+                    throw new Exception($"No se pudo actualizar la tarea con el Id : {tarea.Id}");
+                }
+                transaction.Commit();
+            }
+            catch (Exception ex) {
+                transaction.Rollback();
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task UpdateStateAsync(Guid id, string nuevoEstado) {
+            var sql = "Update tareas set estadotarea = @NuevoEstado where id = @Id";
+            
+            if (dbConnection.State == ConnectionState.Closed)
+                dbConnection.Open();
+            
+            using var transaction = dbConnection.BeginTransaction();
+            try {
+                var affected = await dbConnection.ExecuteAsync(sql, new { NuevoEstado = nuevoEstado, Id = id }, transaction);
+                if (affected == 0) {
+                    transaction.Rollback();
+                    throw new Exception($"No se pudo actualizar el estado de la tarea con el Id : {id}");
+                }
+                transaction.Commit();
+            }
+            catch (Exception ex) {
+                transaction.Rollback();
+                throw new Exception(ex.Message);
+            }
+        }
+        public async Task DeleteAsync(Guid id) {
+            var sql = "Delete from tareas where id = @Id";
+            
+            if (dbConnection.State == ConnectionState.Closed)
+                dbConnection.Open();
+            
+            using var transaction = dbConnection.BeginTransaction();
+            try {
+                var affected = await dbConnection.ExecuteAsync(sql, new { Id = id }, transaction);
+                if (affected == 0) {
+                    transaction.Rollback();
+                    throw new Exception($"No se pudo eliminar la tarea con el Id : {id}");
+                }
+                transaction.Commit();
+            }
+            catch (Exception ex) {
+                transaction.Rollback();
+                throw new Exception(ex.Message);
+            }
+        }
         #endregion
     }
 }

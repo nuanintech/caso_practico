@@ -72,7 +72,7 @@ builder.Services.AddControllers();
 // Agregamos los servicios de Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ClientService API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "TaskService API", Version = "v1" });
 });
 // Configuracion para AutoMapper
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
