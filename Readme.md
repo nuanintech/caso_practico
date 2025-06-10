@@ -95,6 +95,7 @@ Cada servicio escribe sus registros en `/app/logs`. Estos directorios se persist
 
 ### Carga de tareas por FTP
 Para crear tareas automáticamente, coloque un archivo JSON en la carpeta definida por `FTP_FOLDER_PENDING`. El servicio `FtpTareaProcesarServicio` del `task-service` revisa periódicamente esa ubicación y registra cada tarea que siga la estructura `CreateTareaDTO`. Tras el procesamiento, los resultados se guardan en las rutas configuradas por `FTP_FOLDER_PROCESSED` o `FTP_FOLDER_ERROR`.
+
 ---
 
 Después de editar las variables de entorno o los scripts de base de datos recuerda reconstruir los contenedores para que los cambios se apliquen.
