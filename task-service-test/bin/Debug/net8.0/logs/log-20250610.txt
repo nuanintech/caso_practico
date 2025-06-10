@@ -14,3 +14,28 @@ System.Threading.Tasks.TaskCanceledException: A task was canceled.
    at FluentFTP.AsyncFtpClient.GetListing(String path, FtpListOption options, CancellationToken token)
    at task_service.Infrastructure.Ftp.FtpHelper.GetFilesJsonAsync(AsyncFtpClient client, CancellationToken cancellationToken) in D:\Aplicaciones\Maestria\task-service\Infrastructure\Ftp\FtpHelper.cs:line 68
    at task_service.Infrastructure.Ftp.FtpHelper.ProcessFileAsync(Func`4 processJsonFileAsync, ILogger logger, CancellationToken cancellationToken) in D:\Aplicaciones\Maestria\task-service\Infrastructure\Ftp\FtpHelper.cs:line 46
+[10-06-2025 05:20:11] [WRN] more2286: Conflicto
+task_service.Domain.Exceptions.ConflictException: Ya existe una tarea con el código: TSK-008
+   at task_service.Application.Handlers.CreateTareaHandler.Handle(CreateTareaCommand request, CancellationToken cancellationToken) in D:\Aplicaciones\Maestria\task-service\Application\Handlers\CreateTareaHandler.cs:line 27
+   at task_service.Application.Behaviors.ValidationBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken) in D:\Aplicaciones\Maestria\task-service\Application\Behaviors\ValidationBehavior.cs:line 28
+   at task_service.API.Controllers.TareaController.Create(CreateTareaDTO createTareaDTO) in D:\Aplicaciones\Maestria\task-service\API\Controllers\TareaController.cs:line 28
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at task_service.API.Middleware.ErrorHandlingMiddleware.Invoke(HttpContext context) in D:\Aplicaciones\Maestria\task-service\API\Middleware\ErrorHandlingMiddleware.cs:line 23
+[10-06-2025 05:20:28] [ERR] more2286: Error conectando o listando archivos en el FTP
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at FluentFTP.AsyncFtpClient.Execute(String command, CancellationToken token)
+   at FluentFTP.AsyncFtpClient.SetDataTypeNoLockAsync(FtpDataType type, CancellationToken token)
+   at FluentFTP.AsyncFtpClient.GetListingInternal(String listcmd, FtpListOption options, Boolean retry, CancellationToken token)
+   at FluentFTP.AsyncFtpClient.GetListing(String path, FtpListOption options, CancellationToken token)
+   at task_service.Infrastructure.Ftp.FtpHelper.GetFilesJsonAsync(AsyncFtpClient client, CancellationToken cancellationToken) in D:\Aplicaciones\Maestria\task-service\Infrastructure\Ftp\FtpHelper.cs:line 68
+   at task_service.Infrastructure.Ftp.FtpHelper.ProcessFileAsync(Func`4 processJsonFileAsync, ILogger logger, CancellationToken cancellationToken) in D:\Aplicaciones\Maestria\task-service\Infrastructure\Ftp\FtpHelper.cs:line 46

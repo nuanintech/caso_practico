@@ -93,7 +93,7 @@ namespace task_service_test {
             var command = new CreateTareaCommand(dto);
 
             // Act & Assert
-            await Assert.ThrowsAsync<ValidationException>(() => handler.Handle(command, CancellationToken.None));
+            await Assert.ThrowsAsync<ConflictException>(() => handler.Handle(command, CancellationToken.None));
         }
     }
 }
