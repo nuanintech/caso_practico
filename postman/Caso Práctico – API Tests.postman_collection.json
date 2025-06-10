@@ -1,0 +1,407 @@
+{
+	"info": {
+		"_postman_id": "fc46dc6b-8dda-40ee-96c6-2b4ceaa7d8bb",
+		"name": "Caso Práctico – API Tests",
+		"description": "Documentación del API para el sistema de control de tareas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43586203",
+		"_collection_link": "https://cristianmoreno-5265862.postman.co/workspace/75cecc0b-f028-42be-81e7-5cb9641f89eb/collection/43586203-fc46dc6b-8dda-40ee-96c6-2b4ceaa7d8bb?action=share&source=collection_link&creator=43586203"
+	},
+	"item": [
+		{
+			"name": "Client Service",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Identificacion\": \"1234567890\",\n  \"Nombres\": \"Juan\",\n  \"Apellidos\": \"Pérez\",\n  \"Email\": \"juan.perez@example.com\",\n  \"Edad\": 30,\n  \"Cargo\": \"Developer\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/client/",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"client",
+								""
+							]
+						},
+						"description": "**Possible Responses**\n\n- `201 Created` – user created successfully.\n  ```json\n  {\n    \"id\": \"01234567-89ab-cdef-0123456789ab\",\n    \"identificacion\": \"1234567890\",\n    \"nombres\": \"Juan\",\n    \"apellidos\": \"Pérez\",\n    \"email\": \"juan.perez@example.com\",\n    \"edad\": 30,\n    \"cargo\": \"Developer\",\n    \"estado\": \"Activo\"\n  }\n  ```\n- `400 Bad Request` – validation errors.\n- `409 Conflict` – identificacion or email already exists.\n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/client/",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"client",
+								""
+							]
+						},
+						"description": "**Possible Responses**\n\n- `200 OK` – returns array of users.\n  ```json\n  [\n    {\n      \"id\": \"01234567-89ab-cdef-0123456789ab\",\n      \"identificacion\": \"1234567890\",\n      \"nombres\": \"Juan\",\n      \"apellidos\": \"Pérez\",\n      \"email\": \"juan.perez@example.com\",\n      \"edad\": 30,\n      \"cargo\": \"Developer\",\n      \"estado\": \"Activo\"\n    }\n  ]\n  ```\n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/client/a3165eca-5ae4-47b1-ae85-8f441dbcb36a",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"client",
+								"a3165eca-5ae4-47b1-ae85-8f441dbcb36a"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `200 OK` – returns:\n    \n    ``` json\n      {\n        \"id\": \"01234567-89ab-cdef-0123456789ab\",\n        \"identificacion\": \"1234567890\",\n        \"nombres\": \"Juan\",\n        \"apellidos\": \"Pérez\",\n        \"email\": \"juan.perez@example.com\",\n        \"edad\": 30,\n        \"cargo\": \"Developer\",\n        \"estado\": \"Activo\"\n      }\n    \n     ```\n    \n- `404 Not Found` – no user with given ID.\n    \n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by Identificación",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/client/identificacion/1234567890",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"client",
+								"identificacion",
+								"1234567890"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `200 OK` – returns same JSON as Get by ID.\n    \n\n``` json\n    {\n      \"id\": \"01234567-89ab-cdef-0123456789ab\",\n      \"identificacion\": \"1234567890\",\n      \"nombres\": \"Juan\",\n      \"apellidos\": \"Pérez\",\n      \"email\": \"juan.perez@example.com\",\n      \"edad\": 30,\n      \"cargo\": \"Developer\",\n      \"estado\": \"Activo\"\n    }\n\n ```\n\n- `404 Not Found` – no user with given identificacion.\n    \n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by Email",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/client/email/juan.perez@example.com",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"client",
+								"email",
+								"juan.perez@example.com"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `200 OK` – returns same JSON as Get by ID.\n    \n\n``` json\n    {\n      \"id\": \"01234567-89ab-cdef-0123456789ab\",\n      \"identificacion\": \"1234567890\",\n      \"nombres\": \"Juan\",\n      \"apellidos\": \"Pérez\",\n      \"email\": \"juan.perez@example.com\",\n      \"edad\": 30,\n      \"cargo\": \"Developer\",\n      \"estado\": \"Activo\"\n    }\n ```\n\n- `404 Not Found` – no user with given email.\n    \n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Identificacion\": \"1234567890\",\n  \"Nombres\": \"Juan Actualizado\",\n  \"Apellidos\": \"Pérez\",\n  \"Email\": \"juan.perez@example.com\",\n  \"Edad\": 31,\n  \"Cargo\": \"Senior Developer\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/client/a3165eca-5ae4-47b1-ae85-8f441dbcb36a",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"client",
+								"a3165eca-5ae4-47b1-ae85-8f441dbcb36a"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `200 OK` – user updated. Example: same JSON as Get by ID.\n    \n\n``` json\n{\n    \"id\": \"a3165eca-5ae4-47b1-ae85-8f441dbcb36a\",\n    \"identificacion\": \"1234567890\",\n    \"nombres\": \"Juan Actualizado\",\n    \"apellidos\": \"Pérez\",\n    \"email\": \"juan.perez@example.com\",\n    \"edad\": 31,\n    \"cargo\": \"Senior Developer\",\n    \"estado\": \"Activo\"\n}\n ```\n\n- `400 Bad Request` – validation errors.\n    \n- `404 Not Found` – no user with given ID.\n    \n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/client/a3165eca-5ae4-47b1-ae85-8f441dbcb36a",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"client",
+								"a3165eca-5ae4-47b1-ae85-8f441dbcb36a"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `204 No Content` – user deleted.\n- `404 Not Found` – no user with given ID.\n- `500 Internal Server Error`."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Task Service",
+			"item": [
+				{
+					"name": "Create Task",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"CodigoTarea\": \"TAREA-001\",\n  \"Titulo\": \"Implementar F5\",\n  \"Descripcion\": \"Consultar tareas por usuario\",\n  \"CriteriosAceptacion\": \"Solo tareas de ese usuario\",\n  \"FechaInicio\": \"2025-06-10T00:00:00\",\n  \"FechaFin\": \"2025-06-15T00:00:00\",\n  \"EstadoTarea\": \"BackLog\",\n  \"UsuarioId\": \"0024323c-45cb-11f0-8335-ea0052297248\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/task/",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								""
+							]
+						},
+						"description": "**Possible Responses**\n\n- `201 Created` – task created successfully.\n    \n    ``` json\n          {\n            \"id\": \"fedcba98-7654-3210-fedc-ba9876543210\",\n            \"codigoTarea\": \"TAREA-001\",\n            \"titulo\": \"Implementar F5\",\n            \"descripcion\": \"Consultar tareas por usuario\",\n            \"criteriosAceptacion\": \"Solo tareas de ese usuario\",\n            \"fechaInicio\": \"2025-06-10T00:00:00\",\n            \"fechaFin\": \"2025-06-15T00:00:00\",\n            \"tiempoDias\": 5,\n            \"estadoTarea\": \"Backlog\",\n            \"estado\": \"Activo\",\n            \"usuarioId\": \"01234567-89ab-cdef-0123456789ab\"\n          }\n    \n     ```\n    \n- `400 Bad Request` – validation errors.\n    \n- `404 Not Found` – no user with given ID.\n    \n- `409 Conflict` – task is done and cannot and asign user or code task is duplicate\n    \n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/task/",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								""
+							]
+						},
+						"description": "**Possible Responses**\n\n- `200 OK` – returns array of tasks.\n  ```json\n  [\n    {\n      \"id\": \"fedcba98-7654-3210-fedc-ba9876543210\",\n      \"codigoTarea\": \"TAREA-001\",\n      \"titulo\": \"Implementar F5\",\n      \"descripcion\": \"Consultar tareas por usuario\",\n      \"criteriosAceptacion\": \"Solo tareas de ese usuario\",\n      \"fechaInicio\": \"2025-06-10T00:00:00\",\n      \"fechaFin\": \"2025-06-15T00:00:00\",\n      \"tiempoDias\": 5,\n      \"estadoTarea\": \"Backlog\",\n      \"estado\": \"Activo\",\n      \"usuarioId\": \"01234567-89ab-cdef-0123456789ab\"\n    }\n  ]\n  ```\n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Task by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/task/a29602e6-0538-4607-a5b8-bd603b68e1cd",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"a29602e6-0538-4607-a5b8-bd603b68e1cd"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `200 OK` – returns:\n  ```json\n  {\n    \"id\": \"fedcba98-7654-3210-fedc-ba9876543210\",\n    \"codigoTarea\": \"TAREA-001\",\n    \"titulo\": \"Implementar F5\",\n    \"descripcion\": \"Consultar tareas por usuario\",\n    \"criteriosAceptacion\": \"Solo tareas de ese usuario\",\n    \"fechaInicio\": \"2025-06-10T00:00:00\",\n    \"fechaFin\": \"2025-06-15T00:00:00\",\n    \"tiempoDias\": 5,\n    \"estadoTarea\": \"Backlog\",\n    \"estado\": \"Activo\",\n    \"usuarioId\": \"01234567-89ab-cdef-0123456789ab\"\n  }\n  ```\n- `404 Not Found` – no task with given ID.\n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Get Tasks by User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/task/user/0024323c-45cb-11f0-8335-ea0052297248",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"user",
+								"0024323c-45cb-11f0-8335-ea0052297248"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `200 OK` – returns array of tasks for that user (same format as Get All).\n    \n\n``` json\n[\n    {\n        \"id\": \"a29602e6-0538-4607-a5b8-bd603b68e1cd\",\n        \"codigoTarea\": \"TAREA-001\",\n        \"titulo\": \"Implementar F5\",\n        \"descripcion\": \"Consultar tareas por usuario\",\n        \"criteriosAceptacion\": \"Solo tareas de ese usuario\",\n        \"fechaInicio\": \"2025-06-10T00:00:00\",\n        \"fechaFin\": \"2025-06-15T00:00:00\",\n        \"tiempoDias\": 5,\n        \"estadoTarea\": \"BackLog\",\n        \"estado\": \"Activo\",\n        \"usuarioId\": \"0024323c-45cb-11f0-8335-ea0052297248\"\n    }\n]\n ```\n\n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"CodigoTarea\": \"TAREA-001\",\n  \"Titulo\": \"F5 Implementada\",\n  \"Descripcion\": \"Ya consulta tareas por usuario\",\n  \"CriteriosAceptacion\": \"Debe devolver tareas\",\n  \"FechaInicio\": \"2025-06-10T00:00:00\",\n  \"FechaFin\": \"2025-06-16T00:00:00\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/task/a29602e6-0538-4607-a5b8-bd603b68e1cd",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"a29602e6-0538-4607-a5b8-bd603b68e1cd"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `200 OK` – returns updated task JSON.\n    \n\n``` json\n{\n    \"id\": \"a29602e6-0538-4607-a5b8-bd603b68e1cd\",\n    \"codigoTarea\": \"TAREA-001\",\n    \"titulo\": \"F5 Implementada\",\n    \"descripcion\": \"Ya consulta tareas por usuario\",\n    \"criteriosAceptacion\": \"Debe devolver tareas\",\n    \"fechaInicio\": \"2025-06-10T00:00:00\",\n    \"fechaFin\": \"2025-06-16T00:00:00\",\n    \"tiempoDias\": 6,\n    \"estadoTarea\": \"BackLog\",\n    \"estado\": \"Activo\",\n    \"usuarioId\": \"0024323c-45cb-11f0-8335-ea0052297248\"\n}\n ```\n\n- `400 Bad Request` – validation errors.\n    \n- `404 Not Found` – no task with given ID.\n    \n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Update Task State",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"EstadoTarea\": \"Doing\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/task/a29602e6-0538-4607-a5b8-bd603b68e1cd/state",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"a29602e6-0538-4607-a5b8-bd603b68e1cd",
+								"state"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `204 No Content` – state updated.\n- `400 Bad Request` – invalid state.\n- `404 Not Found` – no task with given ID.\n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Assign Task to User",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"TareaId\": \"9de87c7d-0230-4477-b5e2-908b3a5da1af\",\n  \"UsuarioId\": \"0024323c-45cb-11f0-8335-ea0052297248\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/task/assignclient",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"assignclient"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `204 No Content` – task assigned.\n    \n- `400 Bad Request` – invalid IDs or business rule.\n    \n- `404 Not Found` – task or user not found.\n    \n- `409 Conflict` – task is done and cannot and asign user\n    \n- `500 Internal Server Error`."
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Task",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_gateway}}/api/v1/task/a29602e6-0538-4607-a5b8-bd603b68e1cd",
+							"host": [
+								"{{base_url_gateway}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"task",
+								"a29602e6-0538-4607-a5b8-bd603b68e1cd"
+							]
+						},
+						"description": "**Possible Responses**\n\n- `204 No Content` – task deleted.\n- `404 Not Found` – no task with given ID.\n- `500 Internal Server Error`."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "clientBaseUrl",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "taskBaseUrl",
+			"value": "http://localhost:5001",
+			"type": "string"
+		}
+	]
+}

@@ -32,7 +32,7 @@ namespace task_service.Application.Handlers
                     throw new NotFoundException("El usuario no existe.");
 
                 if (createTareaDTO.EstadoTarea == "Done")
-                    throw new ValidationException("No se puede asignar una tarea que ya está finalizada.");
+                    throw new ConflictException("No se puede asignar una tarea que ya está finalizada.");
             }
             
 

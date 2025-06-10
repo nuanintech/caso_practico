@@ -114,3 +114,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
+// <-- esto al final expone la clase Program
+public partial class Program { }
