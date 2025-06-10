@@ -1,0 +1,16 @@
+[10-06-2025 04:59:21] [ERR] more2286: Error conectando o listando archivos en el FTP
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at FluentFTP.AsyncFtpClient.Execute(String command, CancellationToken token)
+   at FluentFTP.AsyncFtpClient.SetDataTypeNoLockAsync(FtpDataType type, CancellationToken token)
+   at FluentFTP.AsyncFtpClient.GetListingInternal(String listcmd, FtpListOption options, Boolean retry, CancellationToken token)
+   at FluentFTP.AsyncFtpClient.GetListing(String path, FtpListOption options, CancellationToken token)
+   at task_service.Infrastructure.Ftp.FtpHelper.GetFilesJsonAsync(AsyncFtpClient client, CancellationToken cancellationToken) in D:\Aplicaciones\Maestria\task-service\Infrastructure\Ftp\FtpHelper.cs:line 68
+   at task_service.Infrastructure.Ftp.FtpHelper.ProcessFileAsync(Func`4 processJsonFileAsync, ILogger logger, CancellationToken cancellationToken) in D:\Aplicaciones\Maestria\task-service\Infrastructure\Ftp\FtpHelper.cs:line 46
+[10-06-2025 04:59:57] [ERR] more2286: Error conectando o listando archivos en el FTP
+System.Threading.Tasks.TaskCanceledException: A task was canceled.
+   at FluentFTP.AsyncFtpClient.Execute(String command, CancellationToken token)
+   at FluentFTP.AsyncFtpClient.SetDataTypeNoLockAsync(FtpDataType type, CancellationToken token)
+   at FluentFTP.AsyncFtpClient.GetListingInternal(String listcmd, FtpListOption options, Boolean retry, CancellationToken token)
+   at FluentFTP.AsyncFtpClient.GetListing(String path, FtpListOption options, CancellationToken token)
+   at task_service.Infrastructure.Ftp.FtpHelper.GetFilesJsonAsync(AsyncFtpClient client, CancellationToken cancellationToken) in D:\Aplicaciones\Maestria\task-service\Infrastructure\Ftp\FtpHelper.cs:line 68
+   at task_service.Infrastructure.Ftp.FtpHelper.ProcessFileAsync(Func`4 processJsonFileAsync, ILogger logger, CancellationToken cancellationToken) in D:\Aplicaciones\Maestria\task-service\Infrastructure\Ftp\FtpHelper.cs:line 46
